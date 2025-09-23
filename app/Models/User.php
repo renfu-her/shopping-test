@@ -15,18 +15,23 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'phone',
+        'address',
+        'is_active',
+        'is_admin',
+        'last_login_at',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -43,6 +48,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'is_admin' => 'boolean',
+            'last_login_at' => 'datetime',
         ];
+    }
+
+    // 與購物車的關係
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }
