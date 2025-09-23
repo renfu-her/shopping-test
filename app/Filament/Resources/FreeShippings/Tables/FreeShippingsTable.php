@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Faqs\Tables;
+namespace App\Filament\Resources\FreeShippings\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,41 +8,43 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class FaqsTable
+class FreeShippingsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->label('Question')
-                    ->searchable()
+                TextColumn::make('minimum_amount')
+                    ->label('Minimum Amount')
+                    ->money('TWD')
                     ->sortable()
-                    ->weight('bold')
-                    ->limit(50),
+                    ->weight('bold'),
 
-                TextColumn::make('category.title')
-                    ->label('Category')
-                    ->searchable()
+                TextColumn::make('start_date')
+                    ->label('Start Date')
+                    ->date('M j, Y')
                     ->sortable()
-                    ->badge()
-                    ->color('primary')
-                    ->placeholder('No category'),
+                    ->alignCenter(),
 
-                TextColumn::make('content')
-                    ->label('Answer')
-                    ->limit(100)
-                    ->html()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('sort_order')
-                    ->label('Sort Order')
-                    ->numeric()
+                TextColumn::make('end_date')
+                    ->label('End Date')
+                    ->date('M j, Y')
                     ->sortable()
+                    ->alignCenter(),
+
+                TextColumn::make('duration')
+                    ->label('Duration')
+                    ->getStateUsing(function ($record) {
+                        if ($record->start_date && $record->end_date) {
+                            $start = \Carbon\Carbon::parse($record->start_date);
+                            $end = \Carbon\Carbon::parse($record->end_date);
+                            return $start->diffInDays($end) . ' days';
+                        }
+                        return 'N/A';
+                    })
                     ->alignCenter(),
 
                 ToggleColumn::make('is_active')
@@ -57,15 +59,9 @@ class FaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('category_id')
-                    ->label('Category')
-                    ->relationship('category', 'title')
-                    ->searchable()
-                    ->preload(),
-
                 TernaryFilter::make('is_active')
                     ->label('Active Status')
-                    ->placeholder('All FAQs')
+                    ->placeholder('All rules')
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only'),
             ])
@@ -78,6 +74,6 @@ class FaqsTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('sort_order');
+            ->defaultSort('start_date', 'desc');
     }
 }

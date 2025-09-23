@@ -27,12 +27,11 @@ class FaqForm
 
                         Select::make('category_id')
                             ->label('Category')
-                            ->relationship('category', 'name')
+                            ->relationship('category', 'title')
                             ->searchable()
                             ->preload()
                             ->createOptionForm([
-                                TextInput::make('name')->required(),
-                                TextInput::make('slug')->required(),
+                                TextInput::make('title')->required(),
                             ]),
 
                         RichEditor::make('content')

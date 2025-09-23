@@ -1,42 +1,40 @@
 <?php
 
-namespace App\Filament\Resources\Faqs\Tables;
+namespace App\Filament\Resources\HomeAds\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class FaqsTable
+class HomeAdsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->circular()
+                    ->size(60)
+                    ->defaultImageUrl('/images/placeholder-home-ad.jpg'),
+
                 TextColumn::make('title')
-                    ->label('Question')
+                    ->label('Title')
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->limit(50),
 
-                TextColumn::make('category.title')
-                    ->label('Category')
-                    ->searchable()
-                    ->sortable()
-                    ->badge()
+                TextColumn::make('link')
+                    ->label('Link')
+                    ->limit(30)
                     ->color('primary')
-                    ->placeholder('No category'),
-
-                TextColumn::make('content')
-                    ->label('Answer')
-                    ->limit(100)
-                    ->html()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('sort_order')
@@ -57,15 +55,9 @@ class FaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('category_id')
-                    ->label('Category')
-                    ->relationship('category', 'title')
-                    ->searchable()
-                    ->preload(),
-
                 TernaryFilter::make('is_active')
                     ->label('Active Status')
-                    ->placeholder('All FAQs')
+                    ->placeholder('All home ads')
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only'),
             ])

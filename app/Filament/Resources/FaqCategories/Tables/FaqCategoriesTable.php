@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Faqs\Tables;
+namespace App\Filament\Resources\FaqCategories\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,36 +8,28 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class FaqsTable
+class FaqCategoriesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->label('Question')
+                    ->label('Category Title')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold')
-                    ->limit(50),
+                    ->weight('bold'),
 
-                TextColumn::make('category.title')
-                    ->label('Category')
-                    ->searchable()
+                TextColumn::make('faqs_count')
+                    ->label('FAQs')
+                    ->counts('faqs')
                     ->sortable()
+                    ->alignCenter()
                     ->badge()
-                    ->color('primary')
-                    ->placeholder('No category'),
-
-                TextColumn::make('content')
-                    ->label('Answer')
-                    ->limit(100)
-                    ->html()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->color('success'),
 
                 TextColumn::make('sort_order')
                     ->label('Sort Order')
@@ -57,15 +49,9 @@ class FaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('category_id')
-                    ->label('Category')
-                    ->relationship('category', 'title')
-                    ->searchable()
-                    ->preload(),
-
                 TernaryFilter::make('is_active')
                     ->label('Active Status')
-                    ->placeholder('All FAQs')
+                    ->placeholder('All categories')
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only'),
             ])

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Faqs\Tables;
+namespace App\Filament\Resources\EmailSettings\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,42 +8,28 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class FaqsTable
+class EmailSettingsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->label('Question')
+                TextColumn::make('name')
+                    ->label('Name')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold')
-                    ->limit(50),
+                    ->weight('bold'),
 
-                TextColumn::make('category.title')
-                    ->label('Category')
+                TextColumn::make('email')
+                    ->label('Email Address')
                     ->searchable()
                     ->sortable()
-                    ->badge()
-                    ->color('primary')
-                    ->placeholder('No category'),
-
-                TextColumn::make('content')
-                    ->label('Answer')
-                    ->limit(100)
-                    ->html()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('sort_order')
-                    ->label('Sort Order')
-                    ->numeric()
-                    ->sortable()
-                    ->alignCenter(),
+                    ->copyable()
+                    ->copyMessage('Email address copied')
+                    ->color('primary'),
 
                 ToggleColumn::make('is_active')
                     ->label('Active')
@@ -57,15 +43,9 @@ class FaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('category_id')
-                    ->label('Category')
-                    ->relationship('category', 'title')
-                    ->searchable()
-                    ->preload(),
-
                 TernaryFilter::make('is_active')
                     ->label('Active Status')
-                    ->placeholder('All FAQs')
+                    ->placeholder('All email settings')
                     ->trueLabel('Active only')
                     ->falseLabel('Inactive only'),
             ])
@@ -78,6 +58,6 @@ class FaqsTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('sort_order');
+            ->defaultSort('name');
     }
 }
