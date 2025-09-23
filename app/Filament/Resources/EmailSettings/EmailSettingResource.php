@@ -22,6 +22,11 @@ class EmailSettingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'System Setting';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return EmailSettingForm::configure($schema);

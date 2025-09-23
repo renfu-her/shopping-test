@@ -22,6 +22,11 @@ class FaqCategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Faq Management';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return FaqCategoryForm::configure($schema);

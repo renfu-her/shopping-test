@@ -35,7 +35,7 @@ class BackendPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
-                Dashboard::class,
+                // Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
@@ -43,26 +43,12 @@ class BackendPanelProvider extends PanelProvider
                 FilamentInfoWidget::class,
             ])
             ->navigationGroups([
-                'E-commerce' => [
-                    'sort' => 1,
-                    'icon' => 'heroicon-o-shopping-cart',
-                ],
-                'Content Management' => [
-                    'sort' => 2,
-                    'icon' => 'heroicon-o-document-text',
-                ],
-                'Marketing & Ads' => [
-                    'sort' => 3,
-                    'icon' => 'heroicon-o-megaphone',
-                ],
-                'Customer Support' => [
-                    'sort' => 4,
-                    'icon' => 'heroicon-o-chat-bubble-left-right',
-                ],
-                'System Settings' => [
-                    'sort' => 5,
-                    'icon' => 'heroicon-o-cog-6-tooth',
-                ],
+                'E-commerce',
+                'Content Management',
+                'Market & Ads',
+                'Faq Management',
+                'Member Management',
+                'System Setting',
             ])
             ->middleware([
                 EncryptCookies::class,

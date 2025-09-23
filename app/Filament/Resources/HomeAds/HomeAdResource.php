@@ -22,6 +22,11 @@ class HomeAdResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Market & Ads';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return HomeAdForm::configure($schema);

@@ -22,6 +22,11 @@ class SettingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'key';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'System Setting';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return SettingForm::configure($schema);

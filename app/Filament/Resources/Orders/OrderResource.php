@@ -26,6 +26,16 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'order_number';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'E-commerce';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 3;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return OrderForm::configure($schema);

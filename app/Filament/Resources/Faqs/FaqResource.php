@@ -22,6 +22,11 @@ class FaqResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'question';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Faq Management';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return FaqForm::configure($schema);

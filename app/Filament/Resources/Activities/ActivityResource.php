@@ -22,6 +22,11 @@ class ActivityResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Content Management';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ActivityForm::configure($schema);

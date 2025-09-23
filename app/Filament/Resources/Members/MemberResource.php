@@ -22,6 +22,11 @@ class MemberResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Member Management';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return MemberForm::configure($schema);

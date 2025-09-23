@@ -22,6 +22,16 @@ class FreeShippingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'minimum_amount';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'E-commerce';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 4;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return FreeShippingForm::configure($schema);
