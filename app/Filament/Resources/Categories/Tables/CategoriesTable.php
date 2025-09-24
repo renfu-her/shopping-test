@@ -23,8 +23,9 @@ class CategoriesTable
                     ->sortable()
                     ->weight('bold')
                     ->formatStateUsing(function (string $state, $record): string {
-                        $indent = str_repeat('— ', $record->ancestors->count());
-                        return $indent . $state;
+                        $indent = str_repeat('   ', $record->ancestors->count());
+                        $prefix = $record->ancestors->count() > 0 ? '- ' : '';
+                        return $indent . $prefix . $state;
                     }),
 
                 TextColumn::make('slug')
@@ -101,7 +102,6 @@ class CategoriesTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('sort_order')
-            ->defaultGroup('parent.name');
+            ->defaultSort('sort_order');
     }
 }

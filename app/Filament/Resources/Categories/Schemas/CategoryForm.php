@@ -39,7 +39,16 @@ class CategoryForm
 
                 Select::make('parent_id')
                     ->label('Parent Category')
-                    ->relationship('parent', 'name')
+                    ->options(function () {
+                        return Category::with('ancestors')
+                            ->orderBy('sort_order')
+                            ->get()
+                            ->mapWithKeys(function ($category) {
+                                $indent = str_repeat('   ', $category->ancestors->count());
+                                $prefix = $category->ancestors->count() > 0 ? '- ' : '';
+                                return [$category->id => $indent . $prefix . $category->name];
+                            });
+                    })
                     ->searchable()
                     ->preload()
                     ->nullable()

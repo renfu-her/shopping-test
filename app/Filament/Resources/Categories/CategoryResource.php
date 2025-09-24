@@ -39,7 +39,10 @@ class CategoryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return CategoriesTable::configure($table);
+        return CategoriesTable::configure($table)
+            ->modifyQueryUsing(function ($query) {
+                return $query->with('ancestors')->orderBy('sort_order');
+            });
     }
 
     public static function getRelations(): array
