@@ -41,7 +41,9 @@ class CategoryResource extends Resource
     {
         return CategoriesTable::configure($table)
             ->modifyQueryUsing(function ($query) {
-                return $query->with('parent')->orderBy('sort_order');
+                return $query->with('parent')
+                    ->orderByRaw('CASE WHEN parent_id IS NULL THEN 0 ELSE 1 END')
+                    ->orderBy('sort_order');
             });
     }
 

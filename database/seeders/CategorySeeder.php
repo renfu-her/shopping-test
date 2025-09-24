@@ -21,11 +21,11 @@ class CategorySeeder extends Seeder
             'sort_order' => 1,
         ]);
 
-        $consumerElectronics = Category::create([
-            'name' => 'Consumer Electronics',
-            'slug' => 'consumer-electronics',
+        $communication = Category::create([
+            'name' => 'Communication',
+            'slug' => 'communication',
             'parent_id' => null,
-            'description' => 'Consumer electronics and gadgets',
+            'description' => 'Communication devices and accessories',
             'sort_order' => 2,
         ]);
 
@@ -38,49 +38,13 @@ class CategorySeeder extends Seeder
             'sort_order' => 1,
         ]);
 
+        // 創建 Communication 的子分類
         Category::create([
-            'name' => 'Desktop & Towers',
-            'slug' => 'desktop-towers',
-            'parent_id' => $computer->id,
-            'description' => 'Desktop computers and towers',
-            'sort_order' => 2,
-        ]);
-
-        // 創建 Consumer Electronics 的子分類
-        Category::create([
-            'name' => 'Audio & Video',
-            'slug' => 'audio-video',
-            'parent_id' => $consumerElectronics->id,
-            'description' => 'Audio and video equipment',
+            'name' => 'Mobile Phones & Accessories',
+            'slug' => 'mobile-phones-accessories',
+            'parent_id' => $communication->id,
+            'description' => 'Smartphones and mobile accessories',
             'sort_order' => 1,
         ]);
-
-        Category::create([
-            'name' => 'Mobile Phones',
-            'slug' => 'mobile-phones',
-            'parent_id' => $consumerElectronics->id,
-            'description' => 'Smartphones and mobile devices',
-            'sort_order' => 2,
-        ]);
-
-        // 創建更多子分類示例
-        $laptops = Category::where('slug', 'computer-laptops')->first();
-        if ($laptops) {
-            Category::create([
-                'name' => 'Gaming Laptops',
-                'slug' => 'gaming-laptops',
-                'parent_id' => $laptops->id,
-                'description' => 'High-performance gaming laptops',
-                'sort_order' => 1,
-            ]);
-
-            Category::create([
-                'name' => 'Business Laptops',
-                'slug' => 'business-laptops',
-                'parent_id' => $laptops->id,
-                'description' => 'Professional business laptops',
-                'sort_order' => 2,
-            ]);
-        }
     }
 }

@@ -41,6 +41,7 @@ class CategoryForm
                     ->label('Parent Category')
                     ->options(function () {
                         return Category::with('parent')
+                            ->orderByRaw('CASE WHEN parent_id IS NULL THEN 0 ELSE 1 END')
                             ->orderBy('sort_order')
                             ->get()
                             ->mapWithKeys(function ($category) {
