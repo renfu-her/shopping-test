@@ -40,12 +40,12 @@ class CategoryForm
                 Select::make('parent_id')
                     ->label('Parent Category')
                     ->options(function () {
-                        return Category::with('ancestors')
+                        return Category::with('parent')
                             ->orderBy('sort_order')
                             ->get()
                             ->mapWithKeys(function ($category) {
-                                $indent = str_repeat('   ', $category->ancestors->count());
-                                $prefix = $category->ancestors->count() > 0 ? '- ' : '';
+                                $indent = str_repeat('   ', $category->ancestors_count);
+                                $prefix = $category->ancestors_count > 0 ? '- ' : '';
                                 return [$category->id => $indent . $prefix . $category->name];
                             });
                     })

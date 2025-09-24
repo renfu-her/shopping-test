@@ -23,8 +23,8 @@ class CategoriesTable
                     ->sortable()
                     ->weight('bold')
                     ->formatStateUsing(function (string $state, $record): string {
-                        $indent = str_repeat('   ', $record->ancestors->count());
-                        $prefix = $record->ancestors->count() > 0 ? '- ' : '';
+                        $indent = str_repeat('   ', $record->ancestors_count);
+                        $prefix = $record->ancestors_count > 0 ? '- ' : '';
                         return $indent . $prefix . $state;
                     }),
 

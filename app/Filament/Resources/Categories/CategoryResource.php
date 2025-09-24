@@ -41,7 +41,7 @@ class CategoryResource extends Resource
     {
         return CategoriesTable::configure($table)
             ->modifyQueryUsing(function ($query) {
-                return $query->with('ancestors')->orderBy('sort_order');
+                return $query->with('parent')->orderBy('sort_order');
             });
     }
 
