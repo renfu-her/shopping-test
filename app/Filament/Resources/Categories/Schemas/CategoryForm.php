@@ -40,15 +40,14 @@ class CategoryForm
                 Select::make('parent_id')
                     ->label('Parent Category')
                     ->options(function () {
-                        return Category::with('parent')
-                            ->orderByRaw('CASE WHEN parent_id IS NULL THEN 0 ELSE 1 END')
-                            ->orderBy('sort_order')
-                            ->get()
-                            ->mapWithKeys(function ($category) {
-                                $indent = str_repeat('   ', $category->ancestors_count);
-                                $prefix = $category->ancestors_count > 0 ? '- ' : '';
-                                return [$category->id => $indent . $prefix . $category->name];
-                            });
+                        $allCategories = Category::with('parent')->get();
+                        $sortedCategories = static::sortCategoriesHierarchically($allCategories);
+                        
+                        return $sortedCategories->mapWithKeys(function ($category) {
+                            $indent = str_repeat('   ', $category->ancestors_count);
+                            $prefix = $category->ancestors_count > 0 ? '- ' : '';
+                            return [$category->id => $indent . $prefix . $category->name];
+                        });
                     })
                     ->searchable()
                     ->preload()
@@ -72,5 +71,28 @@ class CategoryForm
                     ->default(0)
                     ->helperText('Lower numbers appear first'),
             ]);
+    }
+
+    public static function sortCategoriesHierarchically($categories)
+    {
+        $sorted = collect();
+        $rootCategories = $categories->whereNull('parent_id')->sortBy('sort_order');
+        
+        foreach ($rootCategories as $root) {
+            $sorted->push($root);
+            static::addChildrenRecursively($sorted, $root, $categories);
+        }
+        
+        return $sorted;
+    }
+
+    public static function addChildrenRecursively($sorted, $parent, $allCategories)
+    {
+        $children = $allCategories->where('parent_id', $parent->id)->sortBy('sort_order');
+        
+        foreach ($children as $child) {
+            $sorted->push($child);
+            static::addChildrenRecursively($sorted, $child, $allCategories);
+        }
     }
 }

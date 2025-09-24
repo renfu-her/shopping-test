@@ -41,10 +41,37 @@ class CategoryResource extends Resource
     {
         return CategoriesTable::configure($table)
             ->modifyQueryUsing(function ($query) {
-                return $query->with('parent')
-                    ->orderByRaw('CASE WHEN parent_id IS NULL THEN 0 ELSE 1 END')
-                    ->orderBy('sort_order');
+                // 獲取所有分類並進行階層排序
+                $allCategories = $query->with('parent')->get();
+                $sortedCategories = static::sortCategoriesHierarchically($allCategories);
+                
+                // 返回按階層排序的查詢
+                return $query->whereIn('id', $sortedCategories->pluck('id'))
+                    ->orderByRaw('FIELD(id, ' . $sortedCategories->pluck('id')->implode(',') . ')');
             });
+    }
+
+    private static function sortCategoriesHierarchically($categories)
+    {
+        $sorted = collect();
+        $rootCategories = $categories->whereNull('parent_id')->sortBy('sort_order');
+        
+        foreach ($rootCategories as $root) {
+            $sorted->push($root);
+            static::addChildrenRecursively($sorted, $root, $categories);
+        }
+        
+        return $sorted;
+    }
+
+    private static function addChildrenRecursively($sorted, $parent, $allCategories)
+    {
+        $children = $allCategories->where('parent_id', $parent->id)->sortBy('sort_order');
+        
+        foreach ($children as $child) {
+            $sorted->push($child);
+            static::addChildrenRecursively($sorted, $child, $allCategories);
+        }
     }
 
     public static function getRelations(): array
