@@ -42,6 +42,8 @@ class CategoryForm
                     ->relationship('parent', 'name')
                     ->searchable()
                     ->preload()
+                    ->nullable()
+                    ->placeholder('Select a parent category (optional)')
                     ->helperText('Leave empty for root category')
                     ->createOptionForm([
                         TextInput::make('name')->required(),
